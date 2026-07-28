@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/emiago/sipgo"
-	"github.com/emiago/sipgo/sip"
+	"github.com/voorz/sipgo"
+	"github.com/voorz/sipgo/sip"
 
 	"net/http"
 	_ "net/http/pprof"

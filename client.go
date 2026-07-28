@@ -11,7 +11,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/icholy/digest"
 
-	"github.com/emiago/sipgo/sip"
+	"github.com/voorz/sipgo/sip"
 )
 
 func Init() {

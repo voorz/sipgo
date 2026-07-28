@@ -3,7 +3,7 @@ package sipgo
 import (
 	"testing"
 
-	"github.com/emiago/sipgo/sip"
+	"github.com/voorz/sipgo/sip"
 	"github.com/stretchr/testify/assert"
 )
 

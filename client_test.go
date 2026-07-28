@@ -12,8 +12,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/emiago/sipgo/sip"
-	"github.com/emiago/sipgo/siptest"
+	"github.com/voorz/sipgo/sip"
+	"github.com/voorz/sipgo/siptest"
 	"github.com/icholy/digest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
