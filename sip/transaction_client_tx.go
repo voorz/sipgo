@@ -83,7 +83,7 @@ func (tx *ClientTx) Init() error {
 		tx.spinFsmWithError(client_input_timer_b, fmt.Errorf("%s timed out. %w", label, ErrTransactionTimeout))
 	})
 	tx.mu.Unlock()
-	tx.log.Debug("Client transaction initialized", "tx", tx.Key())
+	tx.log.Debug("客户端事务已初始化", "tx", tx.Key())
 	return nil
 }
 
@@ -206,7 +206,7 @@ func (tx *ClientTx) ack() {
 
 	err := tx.conn.WriteMsg(ack)
 	if err != nil {
-		tx.log.Error("send ACK request failed", "tx", tx.Key(),
+		tx.log.Error("发送 ACK 请求失败", "tx", tx.Key(),
 			slog.String("invite_request", tx.origin.Short()),
 			slog.String("invite_response", resp.Short()),
 			slog.String("cancel_request", ack.Short()),
@@ -227,7 +227,7 @@ func (tx *ClientTx) resend() {
 
 	err := tx.conn.WriteMsg(tx.origin)
 	if err != nil {
-		tx.log.Debug("Fail to resend request", "error", err, "req", tx.origin.StartLine())
+		tx.log.Debug("重发请求失败", "error", err, "req", tx.origin.StartLine())
 		err := wrapTransportError(err)
 		go tx.spinFsmWithError(client_input_transport_err, err)
 	}
@@ -263,8 +263,8 @@ func (tx *ClientTx) delete(err error) bool {
 	}
 
 	if _, err := tx.conn.TryClose(); err != nil {
-		tx.log.Info("Closing connection returned error", "error", err, "tx", tx.Key())
+		tx.log.Info("关闭连接返回错误", "error", err, "tx", tx.Key())
 	}
-	tx.log.Debug("Client transaction destroyed", "tx", tx.Key())
+	tx.log.Debug("客户端事务已销毁", "tx", tx.Key())
 	return true
 }

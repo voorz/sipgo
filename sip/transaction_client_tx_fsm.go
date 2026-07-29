@@ -97,11 +97,11 @@ func (tx *ClientTx) inviteStateAccepted(s fsmInput) fsmInput {
 		//  received while the client INVITE state machine is in the "Calling" or
 		//  "Proceeding" states, it MUST transition to the "Accepted" state, pass
 		//  the 2xx response to the TU, and set Timer M to 64*T1
-		tx.log.Debug("retransimission 2xx detected", "tx", tx.Key())
+		tx.log.Debug("检测到 2xx 重传", "tx", tx.Key())
 		tx.fsmState, spinfn = tx.inviteStateAccepted, tx.actPassupRetransmission
 
 	case client_input_transport_err:
-		tx.log.Warn("client transport error detected. Waiting for retransmission", "tx", tx.Key())
+		tx.log.Warn("检测到客户端传输错误，等待重传", "tx", tx.Key())
 		tx.fsmState, spinfn = tx.inviteStateAccepted, tx.actTranErrNoDelete
 	case client_input_timer_m:
 		tx.fsmState, spinfn = tx.inviteStateTerminated, tx.actDelete
@@ -345,7 +345,7 @@ func (tx *ClientTx) actAckResend() fsmInput {
 	if tx.fsmAck != nil {
 		// ACK was sent. Now delay to prevent infinite loop as temporarly fix
 		// This is not clear per RFC, but client could generate a lot requests in this case
-		tx.log.Error("ACK loop retransimission. Resending after T2", "tx", tx.Key())
+		tx.log.Error("ACK 循环重传，T2 后重发", "tx", tx.Key())
 		select {
 		case <-tx.done:
 			return FsmInputNone
@@ -461,7 +461,7 @@ func (tx *ClientTx) passUpRetransmission() {
 		return
 	}
 
-	tx.log.Debug("skipped response. Retransimission", "tx", tx.Key())
+	tx.log.Debug("跳过响应，重传", "tx", tx.Key())
 
 	// Client probably left or not interested, so therefore we must not block here
 	// For proxies they should handle this retransmission

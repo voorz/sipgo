@@ -441,7 +441,7 @@ func (l *TransportLayer) ClientRequestConnection(ctx context.Context, req *Reque
 	if c == nil {
 		if l.log.Enabled(ctx, slog.LevelDebug) {
 			// printing laddr adds some execution
-			l.log.Debug("Creating connection", "laddr", laddr.String(), "raddr", raddr.String(), "network", network)
+			l.log.Debug("创建连接", "laddr", laddr.String(), "raddr", raddr.String(), "network", network)
 		}
 		c, err = transport.CreateConnection(ctx, laddr, raddr, l.handleMessage)
 		if err != nil {
@@ -565,7 +565,7 @@ func (l *TransportLayer) serverRequestConnection(ctx context.Context, req *Reque
 	laddr := Addr{}
 	if l.log.Enabled(ctx, slog.LevelDebug) {
 		// printing laddr adds some execution
-		l.log.Debug("Creating server connection", "laddr", laddr.String(), "raddr", raddr.String(), "network", network)
+		l.log.Debug("创建服务端连接", "laddr", laddr.String(), "raddr", raddr.String(), "network", network)
 	}
 	c, err = transport.CreateConnection(ctx, laddr, raddr, l.handleMessage)
 	return c, err
@@ -637,7 +637,7 @@ func (l *TransportLayer) resolveAddr(ctx context.Context, network string, host s
 	log := l.log
 	defer func(start time.Time) {
 		if dur := time.Since(start); dur > 50*time.Millisecond {
-			l.log.Warn("DNS resolution is slow", "dur", dur)
+			l.log.Warn("DNS 解析缓慢", "dur", dur)
 		}
 	}(time.Now())
 
@@ -646,7 +646,7 @@ func (l *TransportLayer) resolveAddr(ctx context.Context, network string, host s
 		if err == nil {
 			return nil
 		}
-		log.Warn("Doing SRV lookup failed.", "host", host, "error", err)
+		log.Warn("SRV 查找失败", "host", host, "error", err)
 		return l.resolveAddrIP(ctx, host, addr)
 	}
 
@@ -655,12 +655,12 @@ func (l *TransportLayer) resolveAddr(ctx context.Context, network string, host s
 		return nil
 	}
 
-	log.Info("IP addr resolving failed, doing via dns SRV resolver...", "error", err)
+	log.Info("IP 地址解析失败，通过 DNS SRV 解析器重试...", "error", err)
 	return l.resolveAddrSRV(ctx, network, host, sipScheme, addr)
 }
 
 func (l *TransportLayer) resolveAddrIP(ctx context.Context, hostname string, addr *Addr) error {
-	l.log.Debug("DNS Resolving", "host", hostname)
+	l.log.Debug("DNS 解析中", "host", hostname)
 
 	// Do local resolving
 	ips, err := l.dnsResolver.LookupIPAddr(ctx, hostname)
@@ -708,7 +708,7 @@ func (l *TransportLayer) resolveAddrSRV(ctx context.Context, network string, hos
 		proto = "tcp"
 	}
 
-	log.Debug("Doing SRV lookup", "scheme", sipScheme, "proto", proto, "host", hostname)
+	log.Debug("执行 SRV 查找", "scheme", sipScheme, "proto", proto, "host", hostname)
 
 	// The returned records are sorted by priority and randomized
 	// by weight within a priority.
@@ -717,7 +717,7 @@ func (l *TransportLayer) resolveAddrSRV(ctx context.Context, network string, hos
 		return fmt.Errorf("fail to lookup SRV for %q: %w", hostname, err)
 	}
 
-	log.Debug("SRV resolved", "addrs", addrs)
+	log.Debug("SRV 已解析", "addrs", addrs)
 	record := addrs[0]
 
 	ips, err := l.dnsResolver.LookupIP(ctx, "ip", record.Target)
@@ -725,7 +725,7 @@ func (l *TransportLayer) resolveAddrSRV(ctx context.Context, network string, hos
 		return err
 	}
 
-	log.Debug("SRV resolved IPS", "ips", ips, "target", record.Target)
+	log.Debug("SRV 已解析 IP", "ips", ips, "target", record.Target)
 	addr.IP = ips[0]
 	addr.Port = int(record.Port)
 
@@ -748,7 +748,7 @@ func (l *TransportLayer) getConnection(network, addr string) (Connection, error)
 		return nil, fmt.Errorf("transport %s is not supported", network)
 	}
 
-	l.log.Debug("getting connection", "network", network, "addr", addr)
+	l.log.Debug("获取连接中", "network", network, "addr", addr)
 	c := transport.GetConnection(addr)
 	if c == nil {
 		return nil, errTransportConnectionDoesNotExists
@@ -758,7 +758,7 @@ func (l *TransportLayer) getConnection(network, addr string) (Connection, error)
 }
 
 func (l *TransportLayer) Close() error {
-	l.log.Debug("Layer is closing")
+	l.log.Debug("传输层正在关闭")
 	var werr error
 	for _, t := range l.allTransports() {
 		if t == nil {
@@ -769,7 +769,7 @@ func (l *TransportLayer) Close() error {
 		}
 	}
 	if werr != nil {
-		l.log.Debug("Layer closed with error", "error", werr)
+		l.log.Debug("传输层关闭时出错", "error", werr)
 	}
 	return werr
 }

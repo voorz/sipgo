@@ -62,11 +62,11 @@ func (t *TransportTCP) Close() error {
 
 // Serve is direct way to provide conn on which this worker will listen
 func (t *TransportTCP) Serve(l net.Listener, handler MessageHandler) error {
-	t.log.Debug("begin listening on", "network", t.Network(), "laddr", l.Addr().String())
+	t.log.Debug("开始监听", "network", t.Network(), "laddr", l.Addr().String())
 	for {
 		conn, err := l.Accept()
 		if err != nil {
-			t.log.Debug("Fail to accept conenction", "error", err)
+			t.log.Debug("接受连接失败", "error", err)
 			return err
 		}
 		t.initConnection(conn, conn.RemoteAddr().String(), handler)
@@ -100,7 +100,7 @@ func (t *TransportTCP) CreateConnection(ctx context.Context, laddr Addr, raddr A
 		}
 
 		addr := traddr.String()
-		t.log.Debug("Dialing new connection", "raddr", addr)
+		t.log.Debug("正在拨号新连接", "raddr", addr)
 
 		var err error
 		var conn net.Conn
@@ -125,7 +125,7 @@ func (t *TransportTCP) CreateConnection(ctx context.Context, laddr Addr, raddr A
 		// 	return nil, fmt.Errorf("%s keepalive period err=%w", t, err)
 		// }
 
-		t.log.Debug("New connection", "raddr", raddr)
+		t.log.Debug("新连接", "raddr", raddr)
 		c := &TCPConnection{
 			Conn:     conn,
 			refcount: 2 + TransportIdleConnection, // 1 returning + 1 reading + Idle
@@ -146,7 +146,7 @@ func (t *TransportTCP) initConnection(conn net.Conn, raddr string, handler Messa
 	// // conn.SetKeepAlive(true)
 	// conn.SetKeepAlivePeriod(3 * time.Second)
 	laddr := conn.LocalAddr().String()
-	t.log.Debug("New connection", "raddr", raddr)
+	t.log.Debug("新连接", "raddr", raddr)
 	c := &TCPConnection{
 		Conn:     conn,
 		refcount: 1 + TransportIdleConnection,
@@ -163,10 +163,10 @@ func (t *TransportTCP) readConnection(conn *TCPConnection, laddr string, raddr s
 	defer t.pool.Delete(laddr)
 	defer func() {
 		if r := recover(); r != nil {
-			t.log.Warn("connection read panic recovered", "laddr", laddr, "raddr", raddr, "error", r)
+			t.log.Warn("连接读取 panic 已恢复", "laddr", laddr, "raddr", raddr, "error", r)
 		}
 		if err := t.pool.CloseAndDelete(conn, raddr); err != nil {
-			t.log.Warn("connection pool not clean cleanup", "error", err)
+			t.log.Warn("连接池清理不干净", "error", err)
 		}
 	}()
 	defer func() {
@@ -182,11 +182,11 @@ func (t *TransportTCP) readConnection(conn *TCPConnection, laddr string, raddr s
 		num, err := conn.Read(buf)
 		if err != nil {
 			if errors.Is(err, net.ErrClosed) || errors.Is(err, io.EOF) {
-				t.log.Debug("connection was closed", "error", err)
+				t.log.Debug("连接已关闭", "error", err)
 				return
 			}
 
-			t.log.Error("Read error", "error", err)
+			t.log.Error("读取错误", "error", err)
 			return
 		}
 
@@ -202,7 +202,7 @@ func (t *TransportTCP) readConnection(conn *TCPConnection, laddr string, raddr s
 				RemoteAddr: conn.RemoteAddr(),
 			}, data)
 			if err != nil {
-				t.log.Error("Read filter error", "laddr", laddr, "raddr", raddr, "error", err)
+				t.log.Error("读取过滤错误", "laddr", laddr, "raddr", raddr, "error", err)
 				return
 			}
 			if len(filtered) == 0 {
@@ -217,11 +217,11 @@ func (t *TransportTCP) readConnection(conn *TCPConnection, laddr string, raddr s
 			// One or 2 CRLF
 			// https://datatracker.ietf.org/doc/html/rfc5626#section-3.5.1
 			if len(bytes.Trim(data, "\r\n")) == 0 {
-				t.log.Debug("Keep alive CRLF received")
+				t.log.Debug("收到 Keepalive CRLF")
 				if datalen == 4 {
 					// 2 CRLF is ping
 					if _, err := conn.Write(data[:2]); err != nil {
-						t.log.Error("Failed to pong keep alive", "error", err)
+						t.log.Error("Keepalive 响应失败", "error", err)
 						return
 					}
 				}
@@ -247,7 +247,7 @@ func (t *TransportTCP) parseStream(par *ParserStream, data []byte, src string, h
 		if err == ErrParseSipPartial {
 			return
 		}
-		t.log.Error("failed to parse", "error", err, "data", string(data))
+		t.log.Error("解析失败", "error", err, "data", string(data))
 		return
 	}
 }
