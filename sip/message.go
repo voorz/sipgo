@@ -53,6 +53,7 @@ const (
 	StatusRequestTerminated            = 487
 	StatusNotAcceptableHere            = 488
 	StatusRequestPending               = 491
+	StatusSecurityAgreeRequired        = 494 // RFC 3329
 
 	StatusInternalServerError = 500
 	StatusNotImplemented      = 501
