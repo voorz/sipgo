@@ -182,26 +182,41 @@ func (l *TransportLayer) withTransports(conf TransportsConfig) {
 		l.udp = conf.UDP
 		l.udp.connectionReuse = l.connectionReuse
 		l.udp.readFilter = l.readFilter
+		if l.udp.log == nil {
+			l.udp.log = l.log.With("caller", "Transport<UDP>")
+		}
 	}
 	if conf.TCP != nil && l.tcp == nil {
 		l.tcp = conf.TCP
 		l.tcp.connectionReuse = l.connectionReuse
 		l.tcp.readFilter = l.readFilter
+		if l.tcp.log == nil {
+			l.tcp.log = l.log.With("caller", "Transport<TCP>")
+		}
 	}
 	if conf.TLS != nil && l.tls == nil {
 		l.tls = conf.TLS
 		l.tls.connectionReuse = l.connectionReuse
 		l.tls.readFilter = l.readFilter
+		if l.tls.TransportTCP.log == nil {
+			l.tls.TransportTCP.log = l.log.With("caller", "Transport<TLS>")
+		}
 	}
 	if conf.WS != nil && l.ws == nil {
 		l.ws = conf.WS
 		l.ws.connectionReuse = l.connectionReuse
 		l.ws.readFilter = l.readFilter
+		if l.ws.log == nil {
+			l.ws.log = l.log.With("caller", "Transport<WS>")
+		}
 	}
 	if conf.WSS != nil && l.wss == nil {
 		l.wss = conf.WSS
 		l.wss.connectionReuse = l.connectionReuse
 		l.wss.readFilter = l.readFilter
+		if l.wss.TransportWS.log == nil {
+			l.wss.TransportWS.log = l.log.With("caller", "Transport<WSS>")
+		}
 	}
 }
 
