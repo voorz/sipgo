@@ -12,11 +12,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/voorz/sipgo/sip"
-	"github.com/voorz/sipgo/siptest"
 	"github.com/icholy/digest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/voorz/sipgo/sip"
+	"github.com/voorz/sipgo/siptest"
 )
 
 func TestClientRequestBuild(t *testing.T) {

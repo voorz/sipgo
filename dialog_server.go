@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/voorz/sipgo/sip"
 	"github.com/icholy/digest"
+	"github.com/voorz/sipgo/sip"
 )
 
 type DialogServerSession struct {

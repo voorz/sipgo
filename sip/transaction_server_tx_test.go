@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/voorz/sipgo/fakes"
 	"github.com/stretchr/testify/require"
+	"github.com/voorz/sipgo/fakes"
 )
 
 func TestServerTransactionFSM(t *testing.T) {

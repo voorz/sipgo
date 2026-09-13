@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/voorz/sipgo/sip"
 	"github.com/google/uuid"
+	"github.com/voorz/sipgo/sip"
 )
 
 // DialogUA defines UserAgent that will be used in controling your dialog.

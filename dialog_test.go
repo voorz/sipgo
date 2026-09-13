@@ -3,8 +3,8 @@ package sipgo
 import (
 	"testing"
 
-	"github.com/voorz/sipgo/sip"
 	"github.com/stretchr/testify/assert"
+	"github.com/voorz/sipgo/sip"
 )
 
 func TestDialogState(t *testing.T) {

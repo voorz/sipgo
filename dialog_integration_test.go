@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/voorz/sipgo/sip"
 	"github.com/icholy/digest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/voorz/sipgo/sip"
 )
 
 func TestIntegrationDialog(t *testing.T) {

@@ -14,9 +14,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/voorz/sipgo/sip"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/voorz/sipgo/sip"
 )
 
 // This will generate TLS certificates needed for test below

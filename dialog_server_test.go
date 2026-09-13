@@ -8,11 +8,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/voorz/sipgo/fakes"
 	"github.com/voorz/sipgo/sip"
 	"github.com/voorz/sipgo/siptest"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func TestDialogServerByeRequest(t *testing.T) {

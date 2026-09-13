@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/voorz/sipgo/fakes"
 	"github.com/stretchr/testify/require"
+	"github.com/voorz/sipgo/fakes"
 )
 
 func TestClientTransactionInviteFSM(t *testing.T) {
